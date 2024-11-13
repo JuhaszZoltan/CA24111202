@@ -1,15 +1,54 @@
-﻿namespace CA24111202;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace CA24111202;
 
 internal class Fish
 {
     private int top;
     private int depth;
+    private string species;
+    private float weight;
+    private bool weightIsSet = false;
 
-    public string Species { get; set; }
+    public string Species
+    {
+        get => species;
+        set
+        {
+            if (value is null) throw new Exception(
+                "a species értéke nem lehet null");
+
+            if (value.Length < 3 || value.Length > 30) throw new Exception(
+                $"az érték, amit szeretnél beállítani a species-re: {value}, " +
+                $"hossza: {value.Length}. a species hossza csak [3, 30] között valid!");
+
+            species = value;
+        }
+    }
 
     public bool Predator { get; }
 
-    public float Weight { get; set; }
+    public float Weight
+    {
+        get => weight;
+        set
+        {
+            if (value < .5 || value > 40) throw new Exception(
+                $"az érték, amit szeretnél beállítani a weight-re: {value:0.00} " +
+                $"viszont a weight értéke csak [0.5, 40] között valid!");
+
+            if (weightIsSet && (value < weight * .9 || value > weight * 1.1)) 
+                throw new Exception(
+                $"az érték amit szeretnél beállítani weight-re: {value:0.00}. " +
+                $"jelenlegi értéke: {weight}. " +
+                $"ez {Math.Abs((weight-value) / weight * 100):0.00}%-os eltérés! " +
+                $"viszont a weight értéke maximum +/-10%-al módosítható!");
+
+            weight = value;
+            weightIsSet = true;
+        }
+    }
+
     public int Top
     {
         get => top;
@@ -34,6 +73,8 @@ internal class Fish
             depth = value;
         }
     }
+
+    public int Bottom => Top + Depth;
 
     public override string ToString() =>
         $"{Species} " +
