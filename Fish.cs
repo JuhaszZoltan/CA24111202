@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace CA24111202;
+﻿namespace CA24111202;
 
 internal class Fish
 {
